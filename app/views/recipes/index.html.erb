@@ -7,7 +7,7 @@
   <% @recipes.each do |recipe| %>
     <tr>
       <td><%= link_to recipe[0], recipe[0] %></td>
-      <td>まだないよ</td>
+      <td><%= recipe[2] %></td>
       <td><%= recipe[1] %></td>
     </tr>
   <% end %>

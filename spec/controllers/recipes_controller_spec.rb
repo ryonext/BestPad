@@ -23,6 +23,24 @@ describe RecipesController do
         it 'recipe has count' do
           assigns[:recipes].first[1].should_not be_nil
         end
+        it 'recipe has title' do
+          assigns[:recipes].first[2].should_not be_nil
+        end
+      end
+      context 'recipe_title is not registered' do
+        it 'recipe_title count incremented' do
+          count = RecipeTitle.count
+          get 'index'
+          RecipeTitle.count.should > count
+        end
+      end
+      context 'recipe_title is already registered' do
+        it 'recipe_title count not incremented' do
+          get 'index'
+          count = RecipeTitle.count
+          get 'index'
+          RecipeTitle.count.should == count
+        end
       end
     end
   end

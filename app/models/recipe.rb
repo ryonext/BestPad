@@ -1,3 +1,5 @@
+require 'net/http'
+
 class Recipe < ActiveRecord::Base
   attr_accessible :tweet_id, :url
 
@@ -10,7 +12,9 @@ class Recipe < ActiveRecord::Base
     }
     result.each do |r|
       #URIを取る
-      uri = URI.extract(r.text, %w[http]).first.gsub("(", "").gsub(")","")#.gsub(".", "").gsub("@", "").gsub(":", "")
+      uri = URI.extract(r.text, %w[http]).first
+      #.や@などの文字列を取る
+      uri = format_uri(uri)
       #短縮でないuriを特異メソッドで取る
       def uri.expand
         return Recipe.getExpandUri(self)
@@ -55,5 +59,16 @@ class Recipe < ActiveRecord::Base
     end
     return expandUri
   end
+
+  def self.format_uri(uri)
+    case uri.last
+    when ':', '.', '(', ')', '@'
+      uri[-1] = ''
+      self.format_uri(uri)
+    end
+    uri.gsub!(/[?].*/, '')
+    return uri
+  end
+
 
 end

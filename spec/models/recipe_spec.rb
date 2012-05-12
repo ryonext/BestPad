@@ -52,4 +52,74 @@ describe Recipe do
       end
     end
   end
+
+  context '' do
+    describe 'format_uri' do
+      context ':' do
+        it ': is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/:').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context ':::::' do
+        it ':::: is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/:::::').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '@' do
+        it '@ is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/@').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '@@@@@' do
+        it '@@@@@ is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/@@@@@').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '.' do
+        it '. is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/.').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '.....' do
+        it '..... is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/.....').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '(' do
+        it '( is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/(').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '(((((' do
+        it '((((( is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/(((((').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context ')' do
+        it ') is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/)').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context ')))))' do
+        it '))))) is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/)))))').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '?' do
+        it '? is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/?').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '?aaabbb' do
+        it '? and later character is removed' do
+          Recipe.format_uri('http://www.yahoo.co.jp/?aaabbb').should == 'http://www.yahoo.co.jp/'
+        end
+      end
+      context '@.:is contained but not final character' do
+        it 'characters not removed' do
+          Recipe.format_uri('http://aaa@bbbtest/')
+        end
+      end
+    end
+  end
 end
