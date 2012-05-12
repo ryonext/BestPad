@@ -4,12 +4,13 @@ class Recipe < ActiveRecord::Base
     def self.collect(count = 10, volume = 100)
     #レシピを検索する
     result = Array.new
+    maxId = Recipe.maximum(:tweet_id)
     count.times{|i|
-      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => i+1})
+      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => i+1, :since_id => maxId})
     }
     result.each do |r|
       #URIを取る
-      uri = URI.extract(r.text, %w[http]).first.gsub("(", "").gsub(")","").gsub(".", "").gsub("@", "").gsub(":", "")
+      uri = URI.extract(r.text, %w[http]).first.gsub("(", "").gsub(")","")#.gsub(".", "").gsub("@", "").gsub(":", "")
       #短縮でないuriを特異メソッドで取る
       def uri.expand
         return Recipe.getExpandUri(self)
