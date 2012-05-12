@@ -1,0 +1,14 @@
+<table class='table table-striped'>
+  <tr>
+    <td>URL</td>
+    <td>レシピ名</td>
+    <td>つぶやかれ数</td>
+  </tr>
+  <% @recipes.each do |recipe| %>
+    <tr>
+      <td><%= link_to recipe[0], recipe[0] %></td>
+      <td>まだないよ</td>
+      <td><%= recipe[1] %></td>
+    </tr>
+  <% end %>
+</table>
