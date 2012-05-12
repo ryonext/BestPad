@@ -1,57 +1,61 @@
 require 'open-uri'
 require 'net/http'
 
-class SearchRecipeClass
+class SearchRecipeBatch
 
-  def self.search_recipe
+  def self.search_recipe(count = 10, volume = 100)
     #レシピを検索する
     result = Array.new
-    10.times{|i|
-      result += Twitter.search('cookpad.com/recipe/', {:rpp => 100, :page => i+1})
+    count.times{|i|
+      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => i+1})
     }
     result.each do |r|
       #URIを取る
-      uri = URI.extract(r.text, %w[http]).first
-      #レシピ名を取る
-      #doc = Nokogiri::HTML(open(uri))
-      #title = doc.title => 保管する必要ねえや。並び替えの時に。
-      #短縮でないuriを取る
-      real_url = getExpandUrl(uri)
-      if real_url == nil
+      uri = URI.extract(r.text, %w[http]).first.gsub("(", "").gsub(")","")
+      #短縮でないuriを特異メソッドで取る
+      def uri.expand
+        return SearchRecipeBatch.getExpandUri(self)
+      end
+      real_uri = uri.expand
+      if real_uri == nil
         #ログに書く
-        p r.id
+        p uri
+        #p r.id
+        #次の人どうぞ～
+        next
       end
       #DBに入れる
       recipe = Recipe.new
-      recipe.url = real_url
+      recipe.url = real_uri
       recipe.tweet_id = r.id
       recipe.save
     end
   end
 
   #短縮URL→本URLに戻す処理
-  def self.getExpandUrl(urlStr)
-    expandUrl = nil    
+  def self.getExpandUri(uri)
+    expandUri = nil    
     errCd = nil
     begin
-      response = Net::HTTP::get_response(URI.parse(urlStr))
+      response = Net::HTTP::get_response(URI.parse(uri))
       case response
       when Net::HTTPSuccess then
-        #通常URLの場合
-        expandUrl = urlStr
+        #通常URIの場合
+        expandUri = uri
       when Net::HTTPRedirection then
-        #短縮URLの場合
-        expandUrl = getExpandUrl(response['location'])
+        #短縮URIの場合
+        expandUri = getExpandUri(response['location'])
       else #その他
         response.error!
-S      end
+      end
     rescue => errCd
+      #ログに書く
       p errCd
-      p urlStr
-      p expandUrl
+#      p urlStr
+#      p expandUrl
     end
-    return expandUrl
+    return expandUri
   end
 end
 
-#SearchRecipeClass.search_recipe
+#SearchRecipeBatch.search_recipe
