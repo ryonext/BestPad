@@ -112,12 +112,18 @@ describe Recipe do
       end
       context '?aaabbb' do
         it '? and later character is removed' do
-          Recipe.format_uri('http://www.yahoo.co.jp/?aaabbb').should == 'http://www.yahoo.co.jp/'
+          Recipe.format_uri('http://cookpad.com/recipe/1591816?utm_source=dlvr.it&utm_medium=twitter').should == 'http://cookpad.com/recipe/1591816'
+          Recipe.format_uri('http://cookpad.com/recipe/403667?utm_source=dlvr.it&utm_medium=twitter').should == 'http://cookpad.com/recipe/403667'
         end
       end
       context '@.:is contained but not final character' do
         it 'characters not removed' do
           Recipe.format_uri('http://aaa@bbbtest/')
+        end
+      end
+      context 'nil' do
+        it 'get nil' do
+          Recipe.format_uri(nil).should == nil
         end
       end
     end

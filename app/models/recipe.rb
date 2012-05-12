@@ -14,12 +14,14 @@ class Recipe < ActiveRecord::Base
       #URIを取る
       uri = URI.extract(r.text, %w[http]).first
       #.や@などの文字列を取る
-      uri = format_uri(uri)
+      uri = self.format_uri(uri)
       #短縮でないuriを特異メソッドで取る
       def uri.expand
         return Recipe.getExpandUri(self)
       end
       real_uri = uri.expand
+      #展開後に変な文字が付いているケースがあるのでもう一度綺麗にする。
+      real_uri = self.format_uri(real_uri)
       if real_uri == nil
         #ログに書く
         p uri
@@ -54,13 +56,14 @@ class Recipe < ActiveRecord::Base
     rescue => errCd
       #ログに書く
       p errCd
-#      p urlStr
+      p uri
 #      p expandUrl
     end
     return expandUri
   end
 
   def self.format_uri(uri)
+    return if uri == nil
     case uri.last
     when ':', '.', '(', ')', '@'
       uri[-1] = ''
