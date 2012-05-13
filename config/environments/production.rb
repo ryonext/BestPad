@@ -9,7 +9,7 @@ BestPad::Application.configure do
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.serve_static_assets = false
+  config.serve_static_assets = true #false
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
@@ -64,4 +64,12 @@ BestPad::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+  config.assets.precompile += %w( application.css )
+  config.assets.precompile += %w( recipes.css.scss )
+  config.assets.precompile += %w( bootstrap_and_overrides.css.less )
+  config.assets.precompile += %w( application.js )
+  config.assets.precompile += %w( bootstrap.js.coffee )
+  config.assets.precompile += %w( irecipes.js.coffee )
+
 end
+

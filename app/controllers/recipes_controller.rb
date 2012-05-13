@@ -11,6 +11,7 @@ class RecipesController < ApplicationController
       @recipes.push(recipe)
     end
     #delayed_jobでデータ取得にいく。
-    Recipe.delay.method(:collect)
+    Recipe.send_later(:collect)
+    #Recipe.delay.method(:collect)
   end
 end

@@ -1,12 +1,16 @@
+#encoding: utf-8
 require 'net/http'
 
 class Recipe < ActiveRecord::Base
   attr_accessible :tweet_id, :url
-
-    def self.collect(count = 10, volume = 100)
+  def self.collect(count = 10, volume = 100)
+    logger.error 'きてんのかよ'
     #レシピを検索する
     result = Array.new
     maxId = Recipe.maximum(:tweet_id)
+    if maxId == nil || maxId == 0
+      maxId = 1
+    end
     count.times{|i|
       result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => i+1, :since_id => maxId})
     }
