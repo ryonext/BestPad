@@ -4,7 +4,6 @@ require 'net/http'
 class Recipe < ActiveRecord::Base
   attr_accessible :tweet_id, :url
   def self.collect(count = 10, volume = 100)
-    logger.error 'きてんのかよ'
     #レシピを検索する
     result = Array.new
     maxId = Recipe.maximum(:tweet_id)
