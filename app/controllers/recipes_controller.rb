@@ -11,7 +11,17 @@ class RecipesController < ApplicationController
       @recipes.push(recipe)
     end
     #delayed_jobでデータ取得にいく。
-    Recipe.send_later(:collect)
+    #Recipe.send_later(:collect)
     #Recipe.delay.method(:collect)
+  end
+
+  def update_task
+    @result = false
+    if params[:token] != 'password' #ENV[:token]
+      return
+    end
+    #更新処理
+    Recipe.collect
+    @result = true
   end
 end
