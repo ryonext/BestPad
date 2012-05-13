@@ -11,7 +11,7 @@ class Recipe < ActiveRecord::Base
       maxId = 1
     end
     count.times{|i|
-      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => i+1, :since_id => maxId})
+      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => 11-i, :since_id => maxId})
     }
     result.each do |r|
       #URIを取る
