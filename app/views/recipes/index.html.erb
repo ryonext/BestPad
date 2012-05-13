@@ -1,13 +1,13 @@
 <table class='table table-striped'>
   <tr>
+    <td class='span5'>レシピ名</td>
     <td>URL</td>
-    <td>レシピ名</td>
     <td>つぶやかれ数</td>
   </tr>
   <% @recipes.each do |recipe| %>
     <tr>
-      <td><%= link_to recipe[0], recipe[0] %></td>
       <td><%= recipe[2] %></td>
+      <td><%= link_to recipe[0], recipe[0] %></td>
       <td><%= recipe[1] %></td>
     </tr>
   <% end %>
