@@ -22,7 +22,7 @@ class RecipesController < ApplicationController
       return
     end
     #更新処理
-    Recipe.collect(10, 100, 16)
+    Recipe.collect(10, 100, 10)
     @result = true
   end
 end
