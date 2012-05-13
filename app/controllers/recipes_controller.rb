@@ -18,6 +18,7 @@ class RecipesController < ApplicationController
   def update_task
     @result = false
     if params[:token] != ENV['token']
+      logger.error "authenticate error:#{params[:token]}:#{ENV['token']} does not much"
       return
     end
     #更新処理
