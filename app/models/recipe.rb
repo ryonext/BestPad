@@ -39,7 +39,7 @@ class Recipe < ActiveRecord::Base
 
   #短縮URL→本URLに戻す処理
   def self.getExpandUri(uri)
-    expandUri = nil    
+    expandUri = nil
     errCd = nil
     begin
       response = Net::HTTP::get_response(URI.parse(uri))
@@ -72,6 +72,5 @@ class Recipe < ActiveRecord::Base
     uri.gsub!(/[?].*/, '')
     return uri
   end
-
 
 end

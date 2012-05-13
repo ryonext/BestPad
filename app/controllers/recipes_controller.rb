@@ -10,5 +10,7 @@ class RecipesController < ApplicationController
       recipe.push(RecipeTitle.get_title(r[0]).title)
       @recipes.push(recipe)
     end
+    #delayed_jobでデータ取得にいく。
+    Recipe.delay.method(:collect)
   end
 end

@@ -6,6 +6,7 @@ describe RecipesController do
     describe 'index' do
       context '' do
         before(:each) do
+          FactoryGirl.create(:myrecipe)
           get 'index'
         end
         it 'should be_success' do
@@ -29,6 +30,7 @@ describe RecipesController do
       end
       context 'recipe_title is not registered' do
         it 'recipe_title count incremented' do
+          FactoryGirl.create(:myrecipe)
           count = RecipeTitle.count
           get 'index'
           RecipeTitle.count.should > count
@@ -36,6 +38,7 @@ describe RecipesController do
       end
       context 'recipe_title is already registered' do
         it 'recipe_title count not incremented' do
+          FactoryGirl.create(:myrecipe)
           get 'index'
           count = RecipeTitle.count
           get 'index'
