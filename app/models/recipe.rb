@@ -3,7 +3,7 @@ require 'net/http'
 
 class Recipe < ActiveRecord::Base
   attr_accessible :tweet_id, :url
-  def self.collect(count = 10, volume = 100)
+  def self.collect(count = 10, volume = 100, register_count = 1000)
     #レシピを検索する
     result = Array.new
     maxId = Recipe.maximum(:tweet_id)
@@ -11,9 +11,10 @@ class Recipe < ActiveRecord::Base
       maxId = 1
     end
     count.times{|i|
-      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => 11-i, :since_id => maxId})
+      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => 1+i, :since_id => maxId})
     }
-    result.each do |r|
+    i = 0
+    result.reverse.each do |r|
       #URIを取る
       uri = URI.extract(r.text, %w[http]).first
       #.や@などの文字列を取る
@@ -36,6 +37,10 @@ class Recipe < ActiveRecord::Base
       recipe.url = real_uri
       recipe.tweet_id = r.id
       recipe.save
+      i+=1
+      if i > register_count
+        break;
+      end
     end
   end
 
