@@ -24,8 +24,7 @@ class Recipe < ActiveRecord::Base
       real_uri = self.format_uri(real_uri)
       if real_uri == nil
         #ログに書く
-        p uri
-        #p r.id
+        logger.error "Tweet_ID:#{r.id},text:#{r.text}"
         #次の人どうぞ～
         next
       end
@@ -55,9 +54,7 @@ class Recipe < ActiveRecord::Base
       end
     rescue => errCd
       #ログに書く
-      p errCd
-      p uri
-#      p expandUrl
+      logger.error "ERR_CD:#{errCd},uri:#{uri}"
     end
     return expandUri
   end
