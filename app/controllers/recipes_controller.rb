@@ -17,7 +17,7 @@ class RecipesController < ApplicationController
 
   def update_task
     @result = false
-    if params[:token] != ENV[:token]
+    if params[:token] != ENV['token']
       return
     end
     #更新処理
