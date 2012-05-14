@@ -16,3 +16,4 @@
 *.swp
 *.DS_STORE
 /public/assets
+.env

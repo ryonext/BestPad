@@ -1,6 +1,7 @@
 BestPad::Application.routes.draw do
   get "recipes/index"
   post 'tasks/update' => 'recipes#update_task'
+  delete 'tasks/delete' => 'recipes#delete_task'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

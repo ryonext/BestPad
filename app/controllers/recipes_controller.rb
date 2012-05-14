@@ -25,4 +25,17 @@ class RecipesController < ApplicationController
     Recipe.collect(10, 100, 10)
     @result = true
   end
+
+  def delete_task
+    @result = false
+    if params[:token] != ENV['token']
+      p params[:token]
+      p ENV['token']
+      logger.error "authenticate error:#{params[:token]}:#{ENV['token']} does not much"
+      return render :template => 'recipes/update_task'
+    end
+    Recipe.where('created_at < ?', 1.day.ago).delete_all
+    @result = true
+    return render :template => 'recipes/update_task'
+  end
 end

@@ -48,4 +48,48 @@ describe RecipesController do
     end
   end
 
+  describe 'update_task' do
+    it 'not implemeted'
+  end
+
+  context 'data created 1 day ago exitsts' do
+    describe 'delete_task' do
+      context 'correct token' do
+        it 'delete data' do
+          recipe = FactoryGirl.create(:delete_recipe)
+          delete 'delete_task', :token => ENV['token']
+          Recipe.find_by_id(recipe.id).should be_nil
+        end
+      end
+      context 'incorrect token' do
+        before(:each) do
+          @recipe = FactoryGirl.create(:delete_recipe)
+          delete 'delete_task', :token => 'fake_token'
+        end
+        it 'return false' do
+          assigns[:result].should == false
+        end
+        it 'not delete data' do
+          Recipe.find(@recipe.id).should_not be_nil
+        end
+      end
+    end
+  end
+
+  context 'data created 1 day ago does not exist' do
+    describe 'delete_task' do
+      context 'correct token' do
+        it 'not delete data' do
+          recipe = FactoryGirl.create(:not_delete_recipe)
+          delete 'delete_task', :token => ENV['token']
+          Recipe.find(recipe.id).should_not be_nil
+        end
+      end
+    end
+  end
+
+  
+
+
+
 end
