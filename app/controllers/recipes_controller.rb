@@ -7,7 +7,9 @@ class RecipesController < ApplicationController
       recipe = Array.new
       recipe.push(r[0])
       recipe.push(r[1])
-      recipe.push(RecipeTitle.get_title(r[0]).title)
+      recipe_title = RecipeTitle.get_title(r[0])
+      recipe.push(recipe_title.title)
+      recipe.push(recipe_title.img_url)
       @recipes.push(recipe)
     end
     #delayed_jobでデータ取得にいく。
