@@ -12,37 +12,40 @@ describe RecipesController do
         it 'should be_success' do
           response.should be_success
         end
-        it 'recipes are available' do
-          assigns[:recipes].should_not be_nil
+        it 'rankin_recipes are available' do
+          assigns[:r_recipes].should_not be_nil
         end
-        it 'more than one recipe is available' do
-          assigns[:recipes].size > 0
+        it 'more than one r_recipe is available' do
+          assigns[:r_recipes].size > 0
         end
-        it 'recipe has url' do
-          assigns[:recipes].first[0].should_not be_nil
+        it 'r_recipe has uri' do
+          assigns[:r_recipes].first.uri.should_not be_nil
         end
-        it 'recipe has count' do
-          assigns[:recipes].first[1].should_not be_nil
+        it 'r_recipe has tp(tubuyaki_point)' do
+          assigns[:r_recipes].first.tp.should_not be_nil
         end
-        it 'recipe has title' do
-          assigns[:recipes].first[2].should_not be_nil
+        it 'r_recipe has title' do
+          assigns[:r_recipes].first.title.should_not be_nil
+        end
+        it 'r_recipe has img_uri' do
+          assigns[:r_recipes].first.img_uri.should_not be_nil
         end
       end
       context 'recipe_title is not registered' do
         it 'recipe_title count incremented' do
           FactoryGirl.create(:myrecipe)
-          count = RecipeTitle.count
+          count = RankinRecipe.count
           get 'index'
-          RecipeTitle.count.should > count
+          RankinRecipe.count.should > count
         end
       end
       context 'recipe_title is already registered' do
         it 'recipe_title count not incremented' do
           FactoryGirl.create(:myrecipe)
           get 'index'
-          count = RecipeTitle.count
+          count = RankinRecipe.count
           get 'index'
-          RecipeTitle.count.should == count
+          RankinRecipe.count.should == count
         end
       end
     end

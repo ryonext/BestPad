@@ -1,20 +1,26 @@
 class RecipesController < ApplicationController
   def index
-    result = Recipe.count(:id, :group => :url, :order => 'count_id desc', :limit=>10)
-    #タイトル追加処理
-    @recipes = Array.new
+    result = Recipe.count(:id, :group => :url, :order => 'count_id desc', :limit => 10)
+    @r_recipes = Array.new
     result.each do |r|
-      recipe = Array.new
-      recipe.push(r[0])
-      recipe.push(r[1])
-      recipe_title = RecipeTitle.get_title(r[0])
-      recipe.push(recipe_title.title)
-      recipe.push(recipe_title.img_url)
-      @recipes.push(recipe)
+      uri = r[0]
+      r_recipe = RankinRecipe.find_by_uri(uri) || RankinRecipe.new
+      if r_recipe.title == nil || r_recipe.img_uri == nil
+        doc = Nokogiri(open(uri).read)
+        r_recipe.uri = uri
+        r_recipe.title = doc.title
+        img_tag = doc.css("meta")[5]
+        if img_tag != nil
+          outer_img_uri  = img_tag.attributes["content"].value
+          cookpad_id = uri.split('/')[4]
+          r_recipe.img_uri = "/assets/images/recipe/#{cookpad_id}.jpg"
+        end
+        r_recipe.save
+        #r_recipe.save_with_img(outer_img_uri)
+      end
+      r_recipe.tp = r[1]
+      @r_recipes.push(r_recipe)
     end
-    #delayed_jobでデータ取得にいく。
-    #Recipe.send_later(:collect)
-    #Recipe.delay.method(:collect)
   end
 
   def update_task
@@ -31,8 +37,6 @@ class RecipesController < ApplicationController
   def delete_task
     @result = false
     if params[:token] != ENV['token']
-      p params[:token]
-      p ENV['token']
       logger.error "authenticate error:#{params[:token]}:#{ENV['token']} does not much"
       return render :template => 'recipes/update_task'
     end

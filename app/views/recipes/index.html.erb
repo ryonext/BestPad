@@ -48,15 +48,15 @@
     <td class="span6">レシピ</td>
     <td>つぶやき</td>
   </tr>
-  <% @recipes.each do |recipe| %>
+  <% @r_recipes.each do |r| %>
     <tr>
       <td>
-        <h4><%= format_title(recipe[2]) %></h4>
-        <h4><%= link_to recipe[0], recipe[0] %></h4>
-        <div><%= image_tag(recipe[3]) %></div>
+        <h4><%= format_title(r.title) %></h4>
+        <h4><%= link_to r.uri, r.uri %></h4>
+        <!--<div><%= image_tag(r.img_uri) %></div>-->
       </td>
       <td class="span2">
-        <h3><%= recipe[1] %>tp</h3>
+        <h3><%= r.tp %>tp</h3>
       </td>
     </tr>
   <% end %>

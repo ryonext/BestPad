@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :myrecipe, :class => Recipe do
-    url "http://www.google.com/"
+    url "http://cookpad.com/recipe/119122"
     tweet_id 123
   end
   factory :delete_recipe, :class => Recipe do

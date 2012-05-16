@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120514120344) do
+ActiveRecord::Schema.define(:version => 20120515135309) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -29,12 +29,12 @@ ActiveRecord::Schema.define(:version => 20120514120344) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
-  create_table "recipe_titles", :force => true do |t|
+  create_table "rankin_recipes", :force => true do |t|
     t.string   "uri"
     t.string   "title"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "img_url"
+    t.string   "img_uri"
   end
 
   create_table "recipes", :force => true do |t|
