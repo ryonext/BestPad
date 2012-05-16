@@ -15,12 +15,16 @@ class RecipesController < ApplicationController
           cookpad_id = uri.split('/')[4]
           r_recipe.img_uri = "/assets/images/recipe/#{cookpad_id}.jpg"
         end
-        r_recipe.save
-        #r_recipe.save_with_img(outer_img_uri)
+        #r_recipe.save
+        r_recipe.save_with_img(outer_img_uri)
       end
       r_recipe.tp = r[1]
       @r_recipes.push(r_recipe)
     end
+  end
+
+  def stage_index
+    self.index
   end
 
   def update_task

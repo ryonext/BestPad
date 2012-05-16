@@ -79,4 +79,11 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 end
+Spork.each_run do
+  silence_warnings do
+    Dir[Rails.root.join('app/**/*.rb')].each do |file|
+      load file
+    end
+  end
+end
 #WebMock.allow_net_connect!

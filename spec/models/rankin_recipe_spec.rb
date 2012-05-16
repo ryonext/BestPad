@@ -20,58 +20,74 @@ describe RankinRecipe do
     end
   end
 
+  context 'rankin_recipe already saved' do
+    it 'not implemented'
+  end
 
-#  context '' do
-#    describe 'set_title_and_img' do
-#      context 'correct uri' do
-#        before(:each) do
-#          @r_recipe = RankinRecipe.new
-#          @r_recipe.set_title_and_img("http://cookpad.com/recipe/1191229")
-#        end
-#        it 'return rankin_recipe title' do
-#          @r_recipe.title.should_not be_nil
-#        end
-#        it 'return rankin_recipe img' do
-#          @r_recipe.img_uri.should_not be_nil
-#        end
-#        it 'return outer_img_path' do
-#          @r_recipe.outer_img_path.should_not be_nil
-#        end
-#      end
-#    end
-#
-#    describe 'get_title' do
-#      context 'rankin_recipe not registerd' do
-#        it 'returns title' do
-#          r_recipe = RankinRecipe.get_title('http://www.yahoo.co.jp/')
-#          r_recipe.should_not be_nil
-#        end
-#        it 'increments RankinRecipe count' do
-#          count = RankinRecipe.count
-#          r_recipe = RankinRecipe.get_title('http://www.yahoo.co.jp/')
-#          RankinRecipe.count.should > count
-#        end
-#        it 'rankin_recipe is correct' do
-#          r_recipe = RankinRecipe.get_title('http://www.yahoo.co.jp/')
-#          r_recipe.title.should == 'Yahoo! JAPAN'
-#        end
-#      end
-#      context 'rankin_recipe is registered' do
-#        before(:each) do
-#          @title = FactoryGirl.create(:google)
-#        end
-#        it 'returns title' do
-#          RankinRecipe.get_title('http://www.google.com/').should_not be_nil
-#        end
-#        it 'not increments RankinRecipe count' do
-#          count = RankinRecipe.count
-#          RankinRecipe.get_title('http://www.google.com/')
-#          RankinRecipe.count.should == count
-#        end
-#        it 'title is correct' do
-#          RankinRecipe.get_title('http://www.google.com/').title == 'Google先生'
-#        end
-#      end
-#    end
-#  end
+  context 'rankin_recipe is not saved' do
+    describe 'save_with_img' do
+      before(:each) do
+          @before_count = RankinRecipe.count
+          @r_recipe = RankinRecipe.new
+          @r_recipe.title = 'mytitle'
+          @r_recipe.uri = 'http://www.yahoo.co.jp'
+      end
+      context 'correct img uri' do
+        before(:each) do
+          @r_recipe.img_uri = "/assets/images/test/recipe/test.jpg"
+          @r_recipe.save_with_img('http://t1.gstatic.com/images?q=tbn:ANd9GcTrMRO783RkStiU2KvL8Mr2sEEBP6ElaV703uixa-QtjsaoWQ94iw')
+          @saved_recipe = RankinRecipe.find(@r_recipe.id)
+        end
+        it 'saved' do
+          @saved_recipe.should == @r_recipe
+        end
+        it 'title exists' do
+          @saved_recipe.title.should == 'mytitle'
+        end
+        it 'img_uri exists' do
+          @saved_recipe.img_uri.should == '/assets/images/test/recipe/test.jpg'
+        end
+        it 'img_file exists' do
+          File.exists?("public#{@saved_recipe.img_uri}").should == true
+        end
+        it 'RankinRecipe.count is incremented' do
+          RankinRecipe.count.should == @before_count + 1
+        end
+      end
+      context 'no img uri' do
+        before(:each) do
+          @r_recipe.img_uri = nil
+          @r_recipe.save_with_img(nil)
+          @saved_recipe = RankinRecipe.find(@r_recipe.id)
+        end
+        it 'saved' do
+          @saved_recipe.should == @r_recipe
+        end
+        it 'title exists' do
+          @saved_recipe.title.should == 'mytitle'
+        end
+        it 'img_uri is null' do
+          @saved_recipe.img_uri.should be_nil
+        end
+        it 'RankinRecipe.count is incremented' do
+          RankinRecipe.count.should == @before_count + 1
+        end
+      end
+      context 'irregal img uri' do
+        it 'saved'
+        it 'title exists'
+        it 'img_uri is null'
+        it 'img_file does not exitst'
+        it 'RankinRecipe.count is incremented'
+      end
+      context 'uri is null' do
+        it 'does not saved'
+        it 'RankinRecipe.count is not incremeted'
+      end
+      context 'title is null' do
+        it 'does not saved'
+        it 'RankinRecipe.count is not incremented'
+      end
+    end
+  end
 end
