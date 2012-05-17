@@ -28,7 +28,7 @@ describe RecipesController do
           assigns[:r_recipes].first.title.should_not be_nil
         end
         it 'r_recipe has img_uri' do
-          assigns[:r_recipes].first.img_uri.should_not be_nil
+          assigns[:r_recipes].first.img.should_not be_nil
         end
       end
       context 'recipe_title is not registered' do

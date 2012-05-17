@@ -5,22 +5,25 @@ class RecipesController < ApplicationController
     result.each do |r|
       uri = r[0]
       r_recipe = RankinRecipe.find_by_uri(uri) || RankinRecipe.new
-      if r_recipe.title == nil || r_recipe.img_uri == nil
+      if r_recipe.title == nil || r_recipe.img == nil
         doc = Nokogiri(open(uri).read)
         r_recipe.uri = uri
         r_recipe.title = doc.title
         img_tag = doc.css("meta")[5]
         if img_tag != nil
           outer_img_uri  = img_tag.attributes["content"].value
-          cookpad_id = uri.split('/')[4]
-          r_recipe.img_uri = "/assets/images/recipe/#{cookpad_id}.jpg"
+          r_recipe.img = open(outer_img_uri).read if outer_img_uri != nil
         end
         r_recipe.save
-        #r_recipe.save_with_img(outer_img_uri)
       end
       r_recipe.tp = r[1]
       @r_recipes.push(r_recipe)
     end
+  end
+
+  def image
+    r_recipe = RankinRecipe.find(params[:id])
+    send_data r_recipe.img, :type => "image/jpeg", :disposition => "inline" if r_recipe.img != nil
   end
 
   def stage_index

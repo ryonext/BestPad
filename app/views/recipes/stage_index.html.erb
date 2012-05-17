@@ -53,7 +53,7 @@
       <td>
         <h4><%= format_title(r.title) %></h4>
         <h4><%= link_to r.uri, r.uri %></h4>
-        <div><%= image_tag(r.img_uri) %></div>
+        <div><%= image_tag url_for(:action => 'image', :id => r.id) %></div>
       </td>
       <td class="span2">
         <h3><%= r.tp %>tp</h3>

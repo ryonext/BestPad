@@ -34,8 +34,8 @@ describe RankinRecipe do
       end
       context 'correct img uri' do
         before(:each) do
-          @r_recipe.img_uri = "/assets/images/test/recipe/test.jpg"
-          @r_recipe.save_with_img('http://t1.gstatic.com/images?q=tbn:ANd9GcTrMRO783RkStiU2KvL8Mr2sEEBP6ElaV703uixa-QtjsaoWQ94iw')
+          @r_recipe.img =  open('http://t1.gstatic.com/images?q=tbn:ANd9GcTrMRO783RkStiU2KvL8Mr2sEEBP6ElaV703uixa-QtjsaoWQ94iw').read
+          @r_recipe.save
           @saved_recipe = RankinRecipe.find(@r_recipe.id)
         end
         it 'saved' do
@@ -45,7 +45,7 @@ describe RankinRecipe do
           @saved_recipe.title.should == 'mytitle'
         end
         it 'img_uri exists' do
-          @saved_recipe.img_uri.should == '/assets/images/test/recipe/test.jpg'
+          @saved_recipe.img.should_not be_nil
         end
         it 'img_file exists' do
           File.exists?("public#{@saved_recipe.img_uri}").should == true
@@ -56,8 +56,9 @@ describe RankinRecipe do
       end
       context 'no img uri' do
         before(:each) do
-          @r_recipe.img_uri = nil
-          @r_recipe.save_with_img(nil)
+          #@r_recipe.img_uri = nil
+          #@r_recipe.save_with_img(nil)
+          @r_recipe.save
           @saved_recipe = RankinRecipe.find(@r_recipe.id)
         end
         it 'saved' do
