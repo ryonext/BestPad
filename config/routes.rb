@@ -1,7 +1,7 @@
 BestPad::Application.routes.draw do
   get "recipes/index"
   get "recipes/image/:id" => 'recipes#image'
-  get "recipes/stage_index"
+#  get "recipes/stage_index"
   post 'tasks/update' => 'recipes#update_task'
   delete 'tasks/delete' => 'recipes#delete_task'
 
