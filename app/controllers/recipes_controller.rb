@@ -48,6 +48,7 @@ class RecipesController < ApplicationController
       return render :template => 'recipes/update_task'
     end
     Recipe.where('created_at < ?', 1.day.ago).delete_all
+    RankinRecipe.where('created_at < ?', 2.day.ago).delete_all
     @result = true
     return render :template => 'recipes/update_task'
   end

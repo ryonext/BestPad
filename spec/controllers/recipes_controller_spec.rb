@@ -55,10 +55,10 @@ describe RecipesController do
     it 'not implemeted'
   end
 
-  context 'data created 1 day ago exitsts' do
+  context 'recipe created 1 day ago exitsts' do
     describe 'delete_task' do
       context 'correct token' do
-        it 'delete data' do
+        it 'delete recipe' do
           recipe = FactoryGirl.create(:delete_recipe)
           delete 'delete_task', :token => ENV['token']
           Recipe.find_by_id(recipe.id).should be_nil
@@ -72,17 +72,17 @@ describe RecipesController do
         it 'return false' do
           assigns[:result].should == false
         end
-        it 'not delete data' do
+        it 'not delete recipe' do
           Recipe.find(@recipe.id).should_not be_nil
         end
       end
     end
   end
 
-  context 'data created 1 day ago does not exist' do
+  context 'recipe created 1 day ago does not exist' do
     describe 'delete_task' do
       context 'correct token' do
-        it 'not delete data' do
+        it 'not delete recipe' do
           recipe = FactoryGirl.create(:not_delete_recipe)
           delete 'delete_task', :token => ENV['token']
           Recipe.find(recipe.id).should_not be_nil
@@ -91,8 +91,28 @@ describe RecipesController do
     end
   end
 
-  
+  context 'rankin_recipe created 2 day ago exists' do
+    describe 'delete_task' do
+      context 'correct token' do
+        it 'delete rankin_recipe' do
+          r_recipe = FactoryGirl.create(:two_day_r_recipe)
+          delete 'delete_task', :token => ENV['token']
+          RankinRecipe.find_by_id(r_recipe.id).should be_nil
+        end
+      end
+    end
+  end
 
-
+  context 'rankin_recipe created 1 day ago exitst' do
+    describe 'delete_task' do
+      context 'correct token' do
+        it 'not delete rankin_recipe' do
+          r_recipe = FactoryGirl.create(:one_day_r_recipe)
+          delete 'delete_task', :token => ENV['token']
+          RankinRecipe.find_by_id(r_recipe.id).should_not be_nil
+        end
+      end
+    end
+  end
 
 end
