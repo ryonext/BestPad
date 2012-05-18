@@ -44,11 +44,8 @@ describe RankinRecipe do
         it 'title exists' do
           @saved_recipe.title.should == 'mytitle'
         end
-        it 'img_uri exists' do
+        it 'img exists' do
           @saved_recipe.img.should_not be_nil
-        end
-        it 'img_file exists' do
-          File.exists?("public#{@saved_recipe.img_uri}").should == true
         end
         it 'RankinRecipe.count is incremented' do
           RankinRecipe.count.should == @before_count + 1
@@ -56,8 +53,6 @@ describe RankinRecipe do
       end
       context 'no img uri' do
         before(:each) do
-          #@r_recipe.img_uri = nil
-          #@r_recipe.save_with_img(nil)
           @r_recipe.save
           @saved_recipe = RankinRecipe.find(@r_recipe.id)
         end
@@ -67,8 +62,8 @@ describe RankinRecipe do
         it 'title exists' do
           @saved_recipe.title.should == 'mytitle'
         end
-        it 'img_uri is null' do
-          @saved_recipe.img_uri.should be_nil
+        it 'img is null' do
+          @saved_recipe.img.should be_nil
         end
         it 'RankinRecipe.count is incremented' do
           RankinRecipe.count.should == @before_count + 1
