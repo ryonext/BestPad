@@ -53,8 +53,6 @@ group :test do
 #  gem "webmock"
 end
 gem 'nokogiri'
-gem 'delayed_job'
-gem 'delayed_job_active_record'
 
 group :production do
   gem 'pg'
