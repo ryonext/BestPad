@@ -15,5 +15,5 @@
 /tmp
 *.swp
 *.DS_STORE
-/public/assets
+/public/assets/
 .env
