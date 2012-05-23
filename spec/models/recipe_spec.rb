@@ -46,9 +46,15 @@ describe Recipe do
   end
 
   describe 'collect' do
-    context '1.1' do
+    context '1page 1volume' do
       it 'not error' do
-        Recipe.collect(1,1)
+        Recipe.collect(1, 1)
+      end
+    end
+    context 'MaxId is null' do
+      it 'should success' do
+        Recipe.delete_all
+        Recipe.collect(1, 1)
       end
     end
   end
@@ -118,7 +124,7 @@ describe Recipe do
       end
       context '@.:is contained but not final character' do
         it 'characters not removed' do
-          Recipe.format_uri('http://aaa@bbbtest/')
+          Recipe.format_uri('http://aaa@bbbtest/').should == 'http://aaa@bbbtest/'
         end
       end
       context 'nil' do

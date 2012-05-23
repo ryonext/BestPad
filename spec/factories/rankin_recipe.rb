@@ -17,4 +17,8 @@ FactoryGirl.define do
     title "消されないレシピ"
     created_at 1.day.ago
   end
+  factory :without_img_recipe, :class => RankinRecipe do
+    uri "http://www.google.com"
+    title "画像なし"
+  end
 end

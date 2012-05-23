@@ -3,6 +3,17 @@ require 'spec_helper'
 
 describe RankinRecipe do
 
+  describe 'uri' do
+    context 'nil' do
+      it 'should not be_valid' do
+        r_recipe = RankinRecipe.new
+        r_recipe.title = "test"
+        r_recipe.should_not be_valid
+      end
+    end
+  end
+
+
   context 'tp is not defined' do
     describe 'tp=' do
       context 'integer' do
@@ -20,12 +31,8 @@ describe RankinRecipe do
     end
   end
 
-  context 'rankin_recipe already saved' do
-    it 'not implemented'
-  end
-
-  context 'rankin_recipe is not saved' do
-    describe 'save_with_img' do
+  describe 'save' do
+    context 'rankin_recipe is not saved' do
       before(:each) do
           @before_count = RankinRecipe.count
           @r_recipe = RankinRecipe.new
@@ -70,20 +77,101 @@ describe RankinRecipe do
         end
       end
       context 'irregal img uri' do
-        it 'saved'
-        it 'title exists'
-        it 'img_uri is null'
-        it 'img_file does not exitst'
-        it 'RankinRecipe.count is incremented'
+        before(:each) do
+          @r_recipe.img = open('http://wwww.yahooooooooooo.com/').read
+          @r_recipe.save
+          @saved_recipe = RankinRecipe.find(@r_recipe.id)
+        end
+        it 'saved' do
+          @saved_recipe.should == @r_recipe
+        end
+        it 'title exists' do
+          @saved_recipe.title.should == 'mytitle'
+        end
+        it 'img is not null' do
+          @saved_recipe.img.should_not be_nil
+        end
+        it 'RankinRecipe.count is incremented' do
+          RankinRecipe.count.should == @before_count + 1
+        end
       end
       context 'uri is null' do
-        it 'does not saved'
-        it 'RankinRecipe.count is not incremeted'
+        before(:each) do
+          @r_recipe.uri = nil
+        end
+        it 'does not saved' do
+          @r_recipe.save.should == false
+        end
+        it 'RankinRecipe.count is not incremeted' do
+          @r_recipe.save
+          RankinRecipe.count.should == @before_count
+        end
       end
       context 'title is null' do
-        it 'does not saved'
-        it 'RankinRecipe.count is not incremented'
+        before(:each) do
+          @r_recipe.title = nil
+        end
+        it 'does not saved' do
+          @r_recipe.save.should == false
+        end
+        it 'RankinRecipe.count is not incremented' do
+          @r_recipe.save
+          RankinRecipe.count.should == @before_count
+        end
+      end
+    end
+    
+    context 'rankin_recipe already saved without img' do
+      before(:each) do
+        @r_recipe = FactoryGirl.create(:without_img_recipe)
+      end
+      context 'correct img uri' do
+        before(:each) do
+          @r_recipe.img = open('http://t1.gstatic.com/images?q=tbn:ANd9GcTrMRO783RkStiU2KvL8Mr2sEEBP6ElaV703uixa-QtjsaoWQ94iw').read
+        end
+        it 'saved' do
+          @r_recipe.save.should == true
+        end
+        it 'img is exist' do
+          @r_recipe.save
+          recipe = RankinRecipe.find(@r_recipe.id)
+          recipe.img.should_not be_nil
+        end
+        it 'RankinRecipe count is not incremented' do
+          before_count = RankinRecipe.count
+          @r_recipe.save
+          RankinRecipe.count.should == before_count
+        end
+      end
+      context 'irregal img uri' do
+        before(:each) do
+          @r_recipe.img = open('http://wwww.yahooooooooooo.com/').read
+        end
+        it 'saved' do
+          @r_recipe.save.should == true
+        end
+        it 'img exist' do
+          @r_recipe.save
+          recipe = RankinRecipe.find(@r_recipe.id)
+          recipe.img.should_not be_nil
+        end
+        it 'RankinRecipe count is not incremented' do
+          before_count = RankinRecipe.count
+          @r_recipe.save
+          RankinRecipe.count.should == before_count
+        end
+      end
+      context 'no img uri' do
+        it 'saved' do
+          @r_recipe.save.should == true
+        end
+        it 'img is not exist' do
+          @r_recipe.save
+          recipe = RankinRecipe.find(@r_recipe.id)
+          recipe.img.should be_nil
+        end
       end
     end
   end
+
 end
