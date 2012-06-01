@@ -1,5 +1,6 @@
+#encoding: utf-8
 require 'spec_helper'
-
+require 'webmock'
 describe RecipesController do
 
   context '' do
@@ -27,7 +28,7 @@ describe RecipesController do
         it 'r_recipe has title' do
           assigns[:r_recipes].first.title.should_not be_nil
         end
-        it 'r_recipe has img_uri' do
+        it 'r_recipe has img' do
           assigns[:r_recipes].first.img.should_not be_nil
         end
       end

@@ -1,4 +1,6 @@
+#encoding: utf-8
 require 'rubygems'
+require 'webmock'
 require 'spork'
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
@@ -15,9 +17,9 @@ Spork.each_run do
   if Spork.using_spork?
     ActiveSupport::Dependencies.clear
     ActiveRecord::Base.instantiate_observers
+    FactoryGirl.reload
   end
 
-  FactoryGirl.reload
 end
 
 # --- Instructions ---
@@ -84,4 +86,18 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 end
-#WebMock.allow_net_connect!
+WebMock.allow_net_connect!
+WebMock.stub_request(:get, /http:\/\/cookpad.com\/recipe.*/).to_return(:status => 200, 
+                                                                       :body => "<html><head>
+                                                                       <meta http-equiv=m'Content-Type' content='text/html; charset=utf-8' />
+                                                                       <meta content='175180302552476' property='fb:app_id'>
+                                                                       <meta content='cookpad:recipe' property='og:type'>
+                                                                       <meta content='アイスショコラカフェ by ブレンディ' property='og:title'>
+                                                                       <meta content='インスタントコーヒーのアイスカフェオレにチョコレートシロップをのせてリッチに。' property='og:description'>
+                                                                       <meta content='http://d3921.cpcdn.com/recipes/1794179/120x120c/1b725b4a547b2376a802ebaafa3e305f.jpg?u=4294655&amp;p=1335496849' property='og:image'>
+                                                                       <meta content='http://cookpad.com/recipe/1794179' property='og:url'>
+                                                                       </head>
+                                                                       <title>test<title>
+                                                                       </html>", 
+                                                                       :headers => {})
+WebMock.stub_request(:get, /.*jpg.*/).to_return(:status => 200, :body => 'ok')
