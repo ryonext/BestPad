@@ -12,7 +12,10 @@ class RecipesController < ApplicationController
         img_tag = doc.css("meta")[5]
         if img_tag != nil
           outer_img_uri  = img_tag.attributes["content"].value
-          r_recipe.img = open(outer_img_uri).read if outer_img_uri != nil
+          begin
+            r_recipe.img = open(outer_img_uri).read if outer_img_uri != nil
+          rescue
+          end
         end
         r_recipe.save
       end
