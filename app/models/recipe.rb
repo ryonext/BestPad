@@ -6,16 +6,23 @@ class Recipe < ActiveRecord::Base
   def self.collect(count = 10, volume = 100, register_count = 1000)
     #レシピを検索する
     result = Array.new
-    maxId = Recipe.maximum(:tweet_id)
-    if maxId == nil || maxId == 0
-      maxId = 1
+    max_id = Recipe.maximum(:tweet_id)
+    if max_id == nil || max_id == 0
+      max_id = 1
     end
-    count.times{|i|
-      result += Twitter.search('cookpad.com/recipe/', {:rpp => volume, :page => 11-i, :since_id => maxId})
+    search_result = Twitter.search('cookpad.com/recipe/', {:count => volume, :since_id => max_id})
+    result += search_result.statuses
+    min_id = search_result.statuses.map{|t|t[:id]}.min.to_i - 1
+    count.times do |i|
+      search_result = Twitter.search('cookpad.com/recipe/', {:count => volume, :max_id => min_id, :since_id => max_id})
+      result += search_result.statuses
+      min_id = search_result.statuses.map{|t|t[:id]}.min.to_i - 1
+      break if search_result.statuses.count == 0
       if result.size > register_count
         break;
       end
-    }
+    end
+    max_id = search_result.statuses.map{|t|t[:id]}.max
     i = 0
     result.reverse.each do |r|
       #URIを取る
