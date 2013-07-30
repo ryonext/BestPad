@@ -9,7 +9,7 @@ class RecipesController < ApplicationController
         doc = Nokogiri(open(uri).read)
         r_recipe.uri = uri
         r_recipe.title = doc.title
-        img_tag = doc.css("meta")[5]
+        img_tag = doc.css("meta[property='og:image']").first
         if img_tag != nil
           outer_img_uri  = img_tag.attributes["content"].value
           begin

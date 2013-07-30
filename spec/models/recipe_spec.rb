@@ -54,7 +54,7 @@ describe Recipe do
     context 'MaxId is null' do
       it 'should success' do
         Recipe.delete_all
-        Recipe.collect#(1, 1)
+        Recipe.collect(1, 1)
       end
     end
   end
