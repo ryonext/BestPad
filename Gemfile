@@ -41,6 +41,7 @@ group :development, :test do
   gem 'sqlite3'
   gem "rspec-rails", ">= 2.3.0"
   gem "pry-rails"
+  gem 'pry-debugger'
   gem "spork"
   gem "rb-fsevent"
   gem "guard-spork"
