@@ -86,7 +86,7 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 end
-WebMock.allow_net_connect!
+#WebMock.allow_net_connect!
 WebMock.stub_request(:get, /http:\/\/cookpad.com\/recipe.*/).to_return(:status => 200, 
                                                                        :body => "<html><head>
                                                                        <meta http-equiv=m'Content-Type' content='text/html; charset=utf-8' />
@@ -101,3 +101,4 @@ WebMock.stub_request(:get, /http:\/\/cookpad.com\/recipe.*/).to_return(:status =
                                                                        </html>", 
                                                                        :headers => {})
 WebMock.stub_request(:get, /.*jpg.*/).to_return(:status => 200, :body => 'ok')
+WebMock.stub_request(:get, /www.example.com/).to_return(:status => 200, :body => 'ok')

@@ -39,7 +39,7 @@ gem 'twitter'
 gem "twitter-bootstrap-rails"
 group :development, :test do
   gem 'sqlite3'
-  gem "rspec-rails", ">= 2.3.0"
+  gem "rspec-rails"
   gem "pry-rails"
   gem 'pry-debugger'
   gem "spork"
@@ -48,6 +48,7 @@ group :development, :test do
   gem "growl"
   gem 'guard-rspec'
   gem 'factory_girl_rails'
+  gem 'capybara'
 end
 
 group :test do
