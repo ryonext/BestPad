@@ -18,3 +18,4 @@
 /public/assets/
 .env
 vendor/bundle
+spec/fixtures/vcr_cassettes/

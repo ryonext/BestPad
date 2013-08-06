@@ -2,45 +2,47 @@
 require 'spec_helper'
 
 describe Recipe do
-  describe 'expand_uri' do
-    context 'no shorten' do
-      it 'get origial uri' do
-        expand_uri = Recipe.getExpandUri('http://www.yahoo.co.jp/')
-        expand_uri.should == 'http://www.yahoo.co.jp/'
+  if ENV['RAILS_ENV'] == "integration"
+    describe 'expand_uri' do
+      context 'no shorten' do
+        it 'get origial uri' do
+          expand_uri = Recipe.getExpandUri('http://www.yahoo.co.jp/')
+          expand_uri.should == 'http://www.yahoo.co.jp/'
+        end
       end
-    end
-    context 'one shorten' do
-      it 'get original uri' do
-        expand_uri = Recipe.getExpandUri('http://bit.ly/INPsu')
-        expand_uri.should == 'http://www.yahoo.co.jp/'
+      context 'one shorten' do
+        it 'get original uri' do
+          expand_uri = Recipe.getExpandUri('http://bit.ly/INPsu')
+          expand_uri.should == 'http://www.yahoo.co.jp/'
+        end
       end
-    end
-    context 'two shorten' do
-      it 'get original uri' do
-        expand_uri =  Recipe.getExpandUri('http://seo-air.jp/MA71ue')
-        expand_uri.should == 'http://www.yahoo.co.jp/'
+      context 'two shorten' do
+        it 'get original uri' do
+          expand_uri =  Recipe.getExpandUri('http://seo-air.jp/MA71ue')
+          expand_uri.should == 'http://www.yahoo.co.jp/'
+        end
       end
-    end
-    context 'no arg' do
-      it 'get nil' do
-        expand_uri = Recipe.getExpandUri(nil)
-        expand_uri.should be_nil
+      context 'no arg' do
+        it 'get nil' do
+          expand_uri = Recipe.getExpandUri(nil)
+          expand_uri.should be_nil
+        end
       end
-    end
-    context '404 uri' do
-      it 'get nil' do
-        expand_uri = Recipe.getExpandUri('http://wwwwww.yahoo.co.jp/')
-        expand_uri.should be_nil
+      context '404 uri' do
+        it 'get nil' do
+          expand_uri = Recipe.getExpandUri('http://wwwwww.yahoo.co.jp/')
+          expand_uri.should be_nil
+        end
       end
-    end
-    context 'not uri' do
-      it 'get nil' do
-        Recipe.getExpandUri('urlじゃないよねこれ').should be_nil
+      context 'not uri' do
+        it 'get nil' do
+          Recipe.getExpandUri('urlじゃないよねこれ').should be_nil
+        end
       end
-    end
-    context 'integer' do
-      it 'get nil' do
-        Recipe.getExpandUri(12345).should be_nil
+      context 'integer' do
+        it 'get nil' do
+          Recipe.getExpandUri(12345).should be_nil
+        end
       end
     end
   end
@@ -48,13 +50,19 @@ describe Recipe do
   describe 'collect' do
     context '1page 1volume' do
       it 'not error' do
-        Recipe.collect(1, 1)
+        VCR.use_cassette("twitter_seach") do
+          Recipe.collect(1, 1)
+        end
+        # todo no matcher
       end
     end
     context 'MaxId is null' do
       it 'should success' do
         Recipe.delete_all
-        Recipe.collect(1, 1)
+        VCR.use_cassette("twitter_seach") do
+          Recipe.collect(1, 1)
+        end
+        # todo no matcher
       end
     end
   end

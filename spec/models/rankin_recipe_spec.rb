@@ -1,5 +1,6 @@
 #encoding: utf-8
 require 'spec_helper'
+require 'webmock'
 
 describe RankinRecipe do
 
@@ -37,11 +38,11 @@ describe RankinRecipe do
           @before_count = RankinRecipe.count
           @r_recipe = RankinRecipe.new
           @r_recipe.title = 'mytitle'
-          @r_recipe.uri = 'http://www.yahoo.co.jp'
+          @r_recipe.uri = "http://www.example.com/"
       end
       context 'correct img uri' do
         before(:each) do
-          @r_recipe.img =  open('http://t1.gstatic.com/images?q=tbn:ANd9GcTrMRO783RkStiU2KvL8Mr2sEEBP6ElaV703uixa-QtjsaoWQ94iw').read
+          @r_recipe.img =  open("http://www.example.com/").read
           @r_recipe.save
           @saved_recipe = RankinRecipe.find(@r_recipe.id)
         end
@@ -78,7 +79,7 @@ describe RankinRecipe do
       end
       context 'irregal img uri' do
         before(:each) do
-          @r_recipe.img = open('http://wwww.yahooooooooooo.com/').read
+          @r_recipe.img = open('http://www.example.com/').read
           @r_recipe.save
           @saved_recipe = RankinRecipe.find(@r_recipe.id)
         end
@@ -127,7 +128,7 @@ describe RankinRecipe do
       end
       context 'correct img uri' do
         before(:each) do
-          @r_recipe.img = open('http://t1.gstatic.com/images?q=tbn:ANd9GcTrMRO783RkStiU2KvL8Mr2sEEBP6ElaV703uixa-QtjsaoWQ94iw').read
+          @r_recipe.img = open('http://www.example.com/img').read
         end
         it 'saved' do
           @r_recipe.save.should == true
@@ -145,7 +146,7 @@ describe RankinRecipe do
       end
       context 'irregal img uri' do
         before(:each) do
-          @r_recipe.img = open('http://wwww.yahooooooooooo.com/').read
+          @r_recipe.img = open('http://www.example.com/img').read
         end
         it 'saved' do
           @r_recipe.save.should == true

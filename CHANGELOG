@@ -1,4 +1,13 @@
-== 0.0.2
+== 0.2.0(2013/08/02)
+* Run on Unicorn.
+
+== 0.1.2(2013/07/31)
+* Fix blog uri.
+
+== 0.1.1(2013/07/31)
+* Use ENV for secret params.
+
+== 0.1.0(2013/07/30)
 * Start writing CHANGELOG.
 * Fix getting image.
 
