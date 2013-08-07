@@ -37,22 +37,23 @@ class RecipesController < ApplicationController
     @result = false
     if params[:token] != ENV['token']
       logger.error "authenticate error:#{params[:token]}:#{ENV['token']} does not much"
-      return
+      return head 400
     end
     #更新処理
     Recipe.collect(10, 100, 10)
     @result = true
+    return head :created
   end
 
   def delete_task
     @result = false
     if params[:token] != ENV['token']
       logger.error "authenticate error:#{params[:token]}:#{ENV['token']} does not much"
-      return render :template => 'recipes/update_task'
+      return head 400
     end
     Recipe.where('created_at < ?', 1.day.ago).delete_all
     RankinRecipe.where('created_at < ?', 2.day.ago).delete_all
     @result = true
-    return render :template => 'recipes/update_task'
+    return render :template => 'recipes/update_task', :status => :no_content
   end
 end

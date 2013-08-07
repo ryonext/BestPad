@@ -3,6 +3,7 @@ require 'rubygems'
 require 'webmock'
 require 'spork'
 require "vcr"
+require "capybara/rspec"
 
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
